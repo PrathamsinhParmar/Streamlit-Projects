@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import requests
 
 st.markdown('''# **Binance Price App**
  A Simple Crypto Currency Price App, Pulling Price Data From **Binance**
@@ -7,7 +8,13 @@ st.markdown('''# **Binance Price App**
 
 st.header("Selected Prices")
 
-data = pd.read_json("https://api.binance.com/api/v3/ticker/24hr")
+url = "https://api.binance.com/api/v3/ticker/24hr"
+responce = requests.get(url)
+
+if responce.status_code == 200:
+    data = pd.read_json(url)
+else:
+    st.error(f"Failed to fetch data. Status code: {responce.status_code}")
 
 
 def round_value(input_value):
@@ -76,3 +83,4 @@ col3.metric(col9_select , col9_price , col9_persentage)
 st.subheader("All Coin Prices")
 st.dataframe(data)
 
+st.info("Credit : Created By Prathamsinh Parmar")
